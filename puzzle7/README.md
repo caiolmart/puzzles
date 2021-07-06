@@ -23,4 +23,5 @@ Expected time for 4 chairs: 5.326470588235289
 Expected time for 5 chairs: 7.131318681318662
 Expected time for 10 chairs: 11.106827022506963
 Expected time for 30 chairs: 18.608097988054766
+python3 problem_b.py  0,04s user 0,02s system 99% cpu 0,058 total
 ```
