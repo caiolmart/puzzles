@@ -1,13 +1,17 @@
+""" Module solves Kombucha Problem. """
+
 from typing import List, Tuple
 
 
 class State:
+    """ State of the problem. """
     def __init__(self, visited, cur_chair):
         self.visited = visited
         self.cur_chair = cur_chair
 
 
 class KombuchaProblem:
+    """ States, actions and costs of the problem. """
     def __init__(self, n_chairs):
         self.n_chairs = n_chairs
 
@@ -28,15 +32,16 @@ class KombuchaProblem:
 
     def actions(self, state: State) -> List[Tuple[int, float]]:
         """ Returns tuples with actions and their probabilities."""
-        
+
         left_p, right_p = self.left_right_probabilities(state.cur_chair)
         return [(-1, left_p), (1, right_p)]
 
     def get_new_pos(self, state, action):
+        """ Gets new position given state and action. """
         new_pos = state.cur_chair - action
         if new_pos == -1:
-            return self.n_chairs -1
-        elif new_pos == self.n_chairs:
+            return self.n_chairs - 1
+        if new_pos == self.n_chairs:
             return 0
         return new_pos
 
@@ -61,6 +66,7 @@ class KombuchaProblem:
 
 
 def get_expected_time(problem: KombuchaProblem, state: State, cache: dict):
+    """ Gets the expected time of the problem. """
     key = (tuple(state.visited), state.cur_chair)
     if key in cache:
         return cache[key]
@@ -72,11 +78,14 @@ def get_expected_time(problem: KombuchaProblem, state: State, cache: dict):
     total_expected = 0
     for action in actions:
         next_state, cost = problem.next_state(state, action[0])
-        total_expected += action[1] * (cost + get_expected_time(problem, next_state, cache))
+        total_expected += action[1] * \
+            (cost + get_expected_time(problem, next_state, cache))
+    cache[key] = total_expected
     return total_expected
 
 
 if __name__ == '__main__':
+    """ Solves the problem from its initial state. """
     cache = {}
     problem = KombuchaProblem(20)
     expected_time = get_expected_time(problem, problem.initial_state(), cache)
