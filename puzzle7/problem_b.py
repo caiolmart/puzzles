@@ -72,7 +72,7 @@ def get_expected_time(
         problem: KombuchaProblem,
         state: State,
         cache: dict,
-        total_prob: float):
+        acc_prob: float):
     """ Gets the expected time of the problem. """
     key = (tuple(state.visited), state.cur_chair)
     if key in cache:
@@ -86,11 +86,11 @@ def get_expected_time(
     for action in actions:
         next_state, cost = problem.next_state(state, action[0])
         # If the accumulated probability is less than threshold stop expanding.
-        if total_prob < PROB_THRESHOLD:
+        if acc_prob < PROB_THRESHOLD:
             total_expected += action[1] * cost
         else:
             total_expected += action[1] * (cost + get_expected_time(
-                problem, next_state, cache, action[1] * total_prob))
+                problem, next_state, cache, action[1] * acc_prob))
     cache[key] = total_expected
     return total_expected
 
