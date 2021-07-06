@@ -85,6 +85,7 @@ def get_expected_time(
     total_expected = 0
     for action in actions:
         next_state, cost = problem.next_state(state, action[0])
+        # If the accumulated probability is less than threshold stop expanding.
         if total_prob < PROB_THRESHOLD:
             total_expected += action[1] * cost
         else:
