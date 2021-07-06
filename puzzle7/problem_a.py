@@ -5,6 +5,7 @@ from typing import List, Tuple
 
 class State:
     """ State of the problem. """
+
     def __init__(self, visited, cur_chair):
         self.visited = visited
         self.cur_chair = cur_chair
@@ -12,6 +13,7 @@ class State:
 
 class KombuchaProblem:
     """ States, actions and costs of the problem. """
+
     def __init__(self, n_chairs):
         self.n_chairs = n_chairs
 
