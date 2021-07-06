@@ -29,7 +29,7 @@ class KombuchaProblem:
         """ State is the list of visited chair, the current_chair (initial 0)
         and the current direction (-1 for left 1 to right - starts at 0). """
 
-        visited = [0 for _ in range(self.n_chairs)]
+        visited = [0] * self.n_chairs
         return State(visited, 0)
 
     def actions(self, state: State) -> List[Tuple[int, float]]:
