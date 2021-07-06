@@ -87,6 +87,12 @@ def get_expected_time(problem: KombuchaProblem, state: State, cache: dict):
 if __name__ == '__main__':
     """ Solves the problem from its initial state. """
     cache = {}
-    problem = KombuchaProblem(20)
+    n_chairs = 30
+    problem = KombuchaProblem(n_chairs)
     expected_time = get_expected_time(problem, problem.initial_state(), cache)
-    print(expected_time)
+    print(f'Expected time for {n_chairs} chairs: {expected_time}')
+
+    n_chairs = 500
+    problem = KombuchaProblem(n_chairs)
+    expected_time = get_expected_time(problem, problem.initial_state(), cache)
+    print(f'Expected time for {n_chairs} chairs: {expected_time}')
