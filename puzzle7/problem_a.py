@@ -32,26 +32,24 @@ class KombuchaProblem:
         left_p, right_p = self.left_right_probabilities(state.cur_chair)
         return [(-1, left_p), (1, right_p)]
 
+    def get_new_pos(self, state, action):
+        new_pos = state.cur_chair - action
+        if new_pos == -1:
+            return self.n_chairs -1
+        elif new_pos == self.n_chairs:
+            return 0
+        return new_pos
+
     def next_state(self, state: State, action: int):
         """ Returns new state with action. """
 
-        def _pos_right(state, n_chairs):
-            return n_chairs - 1 if state.cur_chair == 0 else state.cur_chair - 1
-
-        def _pos_left(state, n_chairs):
-            return 0 if state.cur_chair == n_chairs - 1 else state.cur_chair + 1
         new_state = State(state.visited.copy(),
                           state.cur_chair)
         new_state.visited[new_state.cur_chair] = 1
         cost = 0
-        if action == 1:
-            while new_state.visited[new_state.cur_chair]:
-                new_state.cur_chair = _pos_right(new_state, self.n_chairs)
-                cost += 1
-        else:
-            while new_state.visited[new_state.cur_chair]:
-                new_state.cur_chair = _pos_left(new_state, self.n_chairs)
-                cost += 1
+        while new_state.visited[new_state.cur_chair]:
+            new_state.cur_chair = self.get_new_pos(new_state, action)
+            cost += 1
         return new_state, cost
 
     def is_final_state(self, state):
