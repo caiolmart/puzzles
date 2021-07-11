@@ -1,9 +1,7 @@
 """ Module solves Kombucha Problem. """
 
 from typing import List, Tuple
-
-
-PROB_THRESHOLD = 1e-15
+import numpy as np
 
 
 class State:
@@ -72,7 +70,8 @@ def get_expected_time(
         problem: KombuchaProblem,
         state: State,
         cache: dict,
-        acc_prob: float):
+        acc_prob: float,
+        prob_threshold: float = 1e-40):
     """ Gets the expected time of the problem. """
     key = (tuple(state.visited), state.cur_chair)
     if key in cache:
@@ -86,11 +85,12 @@ def get_expected_time(
     for action in actions:
         next_state, cost = problem.next_state(state, action[0])
         # If the accumulated probability is less than threshold stop expanding.
-        if acc_prob < PROB_THRESHOLD:
+        if acc_prob < prob_threshold:
             total_expected += action[1] * cost
         else:
             total_expected += action[1] * (cost + get_expected_time(
-                problem, next_state, cache, action[1] * acc_prob))
+                problem, next_state, cache, action[1] * acc_prob,
+                prob_threshold=prob_threshold))
     cache[key] = total_expected
     return total_expected
 
@@ -132,3 +132,12 @@ if __name__ == '__main__':
     expected_time = get_expected_time(
         problem, problem.initial_state(), cache, 1)
     print(f'Expected time for {n_chairs} chairs: {expected_time}')
+
+    for thresh in np.logspace(-1, -50, num=50):
+        cache = {}
+        n_chairs = 30
+        problem = KombuchaProblem(n_chairs)
+        expected_time = get_expected_time(
+            problem, problem.initial_state(), cache, 1, prob_threshold=thresh)
+        print(f'Expected time for {n_chairs} chairs with threshold {thresh}: '
+              f'{expected_time}')
